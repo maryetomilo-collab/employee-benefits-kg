@@ -1,0 +1,8 @@
+### Create partner
+POST http://localhost:8080/api/v1/partners
+Content-Type: application/json
+
+{
+  "businessName": "Adriano2 Coffee",
+  "email": "owner@adriano2.com"
+}
