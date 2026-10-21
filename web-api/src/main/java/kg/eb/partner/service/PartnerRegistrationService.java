@@ -1,6 +1,7 @@
 package kg.eb.partner.service;
 
 import kg.eb.partner.entity.Partner;
+import kg.eb.partner.exception.PartnerEmailAlreadyExistsException;
 import kg.eb.partner.models.PartnerRegisterDto;
 import kg.eb.partner.repository.PartnerRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,9 @@ public class PartnerRegistrationService {
     @Transactional
     public void create(PartnerRegisterDto partnerRegisterDto) {
 
+        if(repository.existsByEmail(partnerRegisterDto.email())) {
+            throw new PartnerEmailAlreadyExistsException();
+        }
         Partner partner = new Partner(partnerRegisterDto.businessName(), partnerRegisterDto.email());
 
         repository.save(partner);
