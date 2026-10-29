@@ -1,6 +1,7 @@
 package kg.eb.common.exception;
 
 import kg.eb.partner.exception.PartnerEmailAlreadyExistsException;
+import kg.eb.partner.exception.PartnerNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,7 +20,7 @@ public class GlobalExceptionHandler {
         }
 
         return switch (code) {
-            case "NotBlank" -> ValidationErrorCode.REQUIRED;
+            case "NotBlank", "NotNull" -> ValidationErrorCode.REQUIRED;
             case "Email" -> ValidationErrorCode.INVALID_EMAIL;
             case "Size" -> ValidationErrorCode.INVALID_SIZE;
             default -> ValidationErrorCode.INVALID_VALUE;
@@ -52,5 +53,11 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleDataIntegrityViolationException() {
         return new ApiError(HttpStatus.CONFLICT.value(), "DATA_CONFLICT", List.of());
+    }
+
+    @ExceptionHandler(PartnerNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handlePartnerNotFoundException() {
+        return new ApiError(HttpStatus.NOT_FOUND.value(), "PARTNER_NOT_FOUND", List.of());
     }
 }
